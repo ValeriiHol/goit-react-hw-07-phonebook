@@ -1,6 +1,4 @@
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -8,21 +6,14 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 
 import { configureStore } from '@reduxjs/toolkit';
 import { contactReducer } from './phoneSlise';
 import { filterReducer } from './filterSlise';
 
-const persistConfig = {
-  key: 'contacts',
-  storage,
-};
-const persistedReducer = persistReducer(persistConfig, contactReducer);
-
 export const store = configureStore({
   reducer: {
-    contacts: persistedReducer,
+    contacts: contactReducer,
     filter: filterReducer,
   },
   middleware: getDefaultMiddleware =>
@@ -33,4 +24,4 @@ export const store = configureStore({
     }),
 });
 
-export const persistor = persistStore(store);
+

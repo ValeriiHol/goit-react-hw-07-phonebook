@@ -1,14 +1,18 @@
 import css from './ContactList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteontact } from 'redux/phoneSlise';
+import { deleteContactThunk } from '../../redux/operation/operation';
+import { selectContacts, selectFilter } from 'redux/selectors/selectors';
 
 function ContactList() {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => {
-    return state.contacts.items.filter(item =>
-      item.name.toLowerCase().trim().includes(state.filter.toLowerCase().trim())
-    );
-  });
+  const items = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
+
+  const contacts = items
+    .filter(item =>
+      item.name.toLowerCase().trim().includes(filter.toLowerCase().trim())
+    )
+    .sort((first, second) => first.name.localeCompare(second.name));
 
   return (
     <ul className={css.list}>
@@ -20,7 +24,7 @@ function ContactList() {
           <button
             className={css.button_delete}
             type="button"
-            onClick={() => dispatch(deleteontact(id))}
+            onClick={() => dispatch(deleteContactThunk(id))}
           >
             Delete
           </button>

@@ -1,13 +1,13 @@
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/phoneSlise';
+import { addContactThunk } from '../../redux/operation/operation';
+import { selectContacts } from 'redux/selectors/selectors';
+
 import css from './ContactForm.module.css';
 
 const ContactForm = ({ onSubmit }) => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => {
-    return state.contacts.items;
-  });
+  const contacts = useSelector(selectContacts);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -27,9 +27,7 @@ const ContactForm = ({ onSubmit }) => {
     if (contacts.find(contact => contact.number === newContact.number)) {
       return alert(`${newContact.number} is already in contacts`);
     }
-
-    dispatch(addContact(newContact));
-
+    dispatch(addContactThunk(newContact));
     e.target.reset();
   };
 
@@ -54,7 +52,7 @@ const ContactForm = ({ onSubmit }) => {
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required 
+          required
         />
       </label>
       <button className={css.button} type="submit">
